@@ -5,6 +5,7 @@ const expect = require('chai');
 const socket = require('socket.io');
 const cors = require('cors');
 const helmet = require('helmet')
+const noCache = require('nocache')
 
 const fccTestingRoutes = require('./routes/fcctesting.js');
 const runner = require('./test-runner.js');
@@ -16,9 +17,10 @@ app.use('/assets', express.static(process.cwd() + '/assets'));
 
 app.use(helmet.noSniff())
 app.use(helmet.xssFilter())
-app.use(helmet.noCache())
+app.use(noCache())
 
 app.use((req, res, next) => {
+  res.setHeader("pragma", "no-cache")
   res.setHeader("X-Powered-By", "PHP 7.4.3");
   next();
 });
